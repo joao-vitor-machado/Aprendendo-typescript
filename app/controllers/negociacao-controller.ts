@@ -1,9 +1,12 @@
 import { Negociacao } from "../models/negociacao.js";
+import { Negociacoes } from "../models/negociacoes.js";
 
 export class NegociacaoController {
     private _inputData: HTMLInputElement;
     private _inputQuantidade: HTMLInputElement;
     private _inputValor: HTMLInputElement;
+
+    private _negociacoes = new Negociacoes();
 
     constructor() {
         this._inputData = document.querySelector("#data");
@@ -18,7 +21,7 @@ export class NegociacaoController {
             parseFloat(this._inputValor.value)
         );
 
-        this.limparFormulario();
+        this._negociacoes.adicionarNegociacao(negociacao);
     }
 
     limparFormulario(): void {
