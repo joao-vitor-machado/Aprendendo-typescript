@@ -10,4 +10,7 @@ export class Negociacao {
     get volume() {
         return this.quantidade * this.valor;
     }
+    static criaDe(data, quantidade, valor) {
+        return new Negociacao(new Date(data.replace(/-/g, ",")), parseInt(quantidade), parseFloat(valor));
+    }
 }
