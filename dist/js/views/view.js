@@ -1,6 +1,12 @@
 export class View {
     constructor(seletor, escapar = false) {
-        this._elemento = document.querySelector(seletor);
+        const elemento = document.querySelector(seletor);
+        if (elemento) {
+            this._elemento = elemento;
+        }
+        else {
+            throw Error("Esse é um objeto nulo. Envie um objeto HTMLElement válido");
+        }
         this._escapar = escapar;
     }
     update(model) {

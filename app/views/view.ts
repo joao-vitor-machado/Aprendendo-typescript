@@ -3,7 +3,14 @@ export abstract class View<T> {
     private _escapar;
 
     constructor(seletor : string, escapar : boolean = false) { 
-        this._elemento = document.querySelector(seletor);
+        const elemento = document.querySelector(seletor);
+
+        if(elemento){
+            this._elemento = elemento as HTMLElement;
+        }else{
+            throw Error("Esse é um objeto nulo. Envie um objeto HTMLElement válido");
+        }
+         
         this._escapar = escapar;
     }
 
