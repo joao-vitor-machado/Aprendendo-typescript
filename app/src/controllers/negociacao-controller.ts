@@ -1,3 +1,4 @@
+import { logarTempoDeExecução } from "../decorators/logar-tempo-de-execucao.js";
 import { DiasDaSemana } from "../enums/dias-da-semana.js";
 import { Negociacao } from "../models/negociacao.js";
 import { Negociacoes } from "../models/negociacoes.js";
@@ -20,8 +21,9 @@ export class NegociacaoController {
         this._negociacoesView.update(this._negociacoes);
     }
 
+    @logarTempoDeExecução()
     public adicionar() {
-
+       
         const negociacao = Negociacao.criaDe(this._inputData.value, this._inputValor.value, this._inputQuantidade.value);
 
         if(!this.isDiaUtil(negociacao.data)){ 
@@ -32,7 +34,7 @@ export class NegociacaoController {
             this._negociacoes.adicionarNegociacao(negociacao);
             this.atualizarView();
             this.limparFormulario();
-        
+            
     }
 
     private limparFormulario(): void {
