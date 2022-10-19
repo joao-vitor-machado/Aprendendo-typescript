@@ -6,6 +6,8 @@ import { Negociacoes } from "../models/negociacoes.js";
 import { MensagemView } from "../views/mensagemView.js";
 import { NegociacoesView } from "../views/negociacoes-view.js";
 import { domInjector } from "../decorators/domInjector.js";
+import { NegociacoesDoDia } from "../interfaces/negociacao-do-dia.js";
+import { NegociacoesService } from "../services/negociacoes-service.js";
 
 export class NegociacaoController {
     @domInjector("#data")
@@ -18,6 +20,7 @@ export class NegociacaoController {
 
     private _negociacoes = new Negociacoes();
     private _negociacoesView = new NegociacoesView('#negociacoesView');
+    private _negociacaoService = new NegociacoesService();
 
     constructor() {
         this._negociacoesView.update(this._negociacoes);
@@ -56,5 +59,16 @@ export class NegociacaoController {
 
     private isDiaUtil(data : Date) : boolean {
         return data.getDay() > DiasDaSemana.DOMINGO && data.getDay() < DiasDaSemana.SABADO;
+    }
+
+    importaDados() : void{
+        this._negociacaoService.obterNegociacoes()
+        .then(negociacoesDeHoje => {
+            for(let negociacao of negociacoesDeHoje){
+                this._negociacoes.adicionarNegociacao(negociacao);
+            }
+
+            this._negociacoesView.update(this._negociacoes);
+        })
     }
 }

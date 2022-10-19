@@ -12,11 +12,13 @@ import { Negociacoes } from "../models/negociacoes.js";
 import { MensagemView } from "../views/mensagemView.js";
 import { NegociacoesView } from "../views/negociacoes-view.js";
 import { domInjector } from "../decorators/domInjector.js";
+import { NegociacoesService } from "../services/negociacoes-service.js";
 export class NegociacaoController {
     constructor() {
         this._mensagemView = new MensagemView("#mensagemView");
         this._negociacoes = new Negociacoes();
         this._negociacoesView = new NegociacoesView('#negociacoesView');
+        this._negociacaoService = new NegociacoesService();
         this._negociacoesView.update(this._negociacoes);
     }
     adicionar() {
@@ -41,6 +43,15 @@ export class NegociacaoController {
     }
     isDiaUtil(data) {
         return data.getDay() > DiasDaSemana.DOMINGO && data.getDay() < DiasDaSemana.SABADO;
+    }
+    importaDados() {
+        this._negociacaoService.obterNegociacoes()
+            .then(negociacoesDeHoje => {
+            for (let negociacao of negociacoesDeHoje) {
+                this._negociacoes.adicionarNegociacao(negociacao);
+            }
+            this._negociacoesView.update(this._negociacoes);
+        });
     }
 }
 __decorate([
