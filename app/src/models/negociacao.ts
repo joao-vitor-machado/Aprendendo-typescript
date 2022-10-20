@@ -1,5 +1,7 @@
-export class Negociacao {
+import { Comparavel } from "../interfaces/comparavel.js";
+import { Imprimivel } from "../utilis/imprimivel.js";
 
+export class Negociacao implements Imprimivel, Comparavel<Negociacao>{
     constructor(
         private  _data : Date,
         public readonly quantidade : number,
@@ -20,6 +22,16 @@ export class Negociacao {
             parseInt(quantidade),
             parseFloat(valor)
         );
+    }
+
+    public paraString() : string {
+        return JSON.stringify(this, null, 2);
+    }
+
+    public ehIgual(negociacao : Negociacao) {
+        return this.data.getDate() === negociacao.data.getDate()
+        && this.data.getMonth() === negociacao.data.getMonth()
+        && this.data.getFullYear() === negociacao.data.getFullYear()
     }
 
 }

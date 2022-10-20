@@ -13,6 +13,7 @@ import { MensagemView } from "../views/mensagemView.js";
 import { NegociacoesView } from "../views/negociacoes-view.js";
 import { domInjector } from "../decorators/domInjector.js";
 import { NegociacoesService } from "../services/negociacoes-service.js";
+import { imprimir } from "../utilis/imprimir.js";
 export class NegociacaoController {
     constructor() {
         this._mensagemView = new MensagemView("#mensagemView");
@@ -40,12 +41,18 @@ export class NegociacaoController {
     atualizarView() {
         this._negociacoesView.update(this._negociacoes);
         this._mensagemView.update("Negociação adicionada com sucesso");
+        imprimir(this._negociacoes, this._negociacoes.getAllNegociacoes()[0]);
     }
     isDiaUtil(data) {
         return data.getDay() > DiasDaSemana.DOMINGO && data.getDay() < DiasDaSemana.SABADO;
     }
     importaDados() {
-        this._negociacaoService.obterNegociacoes()
+        this._negociacaoService.obterNegociacoes().
+            then(negociacoesDeHoje => {
+            return negociacoesDeHoje.filter(negociacaoDeHoje => {
+                return !this._negociacoes.getAllNegociacoes().some(negociacao => negociacao.ehIgual(negociacaoDeHoje));
+            });
+        })
             .then(negociacoesDeHoje => {
             for (let negociacao of negociacoesDeHoje) {
                 this._negociacoes.adicionarNegociacao(negociacao);
